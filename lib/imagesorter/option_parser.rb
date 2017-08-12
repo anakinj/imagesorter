@@ -71,7 +71,7 @@ module Imagesorter
           exit
         end
 
-        opts.on('--verbose') do |verbose|
+        opts.on('--verbose', 'Increase log message verbosity') do |verbose|
           options.verbose = verbose
         end
 
