@@ -35,18 +35,9 @@ module Imagesorter
     private
 
     def setup_logger
+      Imagesorter.logger = Logger.new(@options.logfile) if @options.logfile
 
-      if @options.logfile
-        Imagesorter.logger = Logger.new(@options.logfile)
-      end
-
-      if @options.verbose == true
-        Imagesorter.logger.level = Logger::DEBUG
-      elsif @options.silent == true && !@options.logfile
-        Imagesorter.logger.level = Logger::FATAL
-      else
-        Imagesorter.logger.level = Logger::INFO
-      end
+      Imagesorter.logger.level = resolve_log_level
 
       Imagesorter.logger.formatter = proc do |severity, datetime, _progname, msg|
         date_format = datetime.strftime('%Y-%m-%d %H:%M:%S')
@@ -56,6 +47,14 @@ module Imagesorter
           "[#{date_format}] [#{severity}] #{msg}\n"
         end
       end
+    end
+
+    def resolve_log_level
+      return Logger::DEBUG if @options.verbose == true
+
+      return Logger::FATAL if @options.silent == true && !@options.logfile
+
+      Logger::INFO
     end
 
     def setup_locale
@@ -69,9 +68,9 @@ module Imagesorter
         recursive:  @options.recursive,
         extensions: @options.extensions,
         processor:  Imagesorter::FileSystemProcessor.new(destination:     @options.dest,
-                                                        destination_fmt: @options.destination_format,
-                                                        copy_mode:       @options.copy_mode,
-                                                        test:            @options.test)
+                                                         destination_fmt: @options.destination_format,
+                                                         copy_mode:       @options.copy_mode,
+                                                         test:            @options.test)
       }
 
       if progressbar_enabled?

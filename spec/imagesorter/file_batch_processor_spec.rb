@@ -27,7 +27,7 @@ describe Imagesorter::FileBatchProcessor do
 
   let(:mtime_categorizer) do
     Imagesorter::Categorizers::ChainedCategorizer.new(Imagesorter::Categorizers::FileExifCategorizer.new,
-                                                     Imagesorter::Categorizers::FileStatCategorizer.new(:mtime))
+                                                      Imagesorter::Categorizers::FileStatCategorizer.new(:mtime))
   end
 
   describe '#collect!' do
@@ -87,7 +87,7 @@ describe Imagesorter::FileBatchProcessor do
       instance = described_class.new(source:      test_dir,
                                      categorizer: mtime_categorizer,
                                      processor:   Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
-                                                                                      copy_mode: :move))
+                                                                                       copy_mode: :move))
 
       instance.execute!
       expect(File.exist?(File.join(test_dir, 'test1.jpg'))).to eq false
@@ -98,7 +98,7 @@ describe Imagesorter::FileBatchProcessor do
       instance = described_class.new(source:      test_dir,
                                      categorizer: mtime_categorizer,
                                      processor:   Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
-                                                                                      destination_fmt: '%Y/%m/%d/%<noop>s/%<name>s.%<extension>s'))
+                                                                                       destination_fmt: '%Y/%m/%d/%<noop>s/%<name>s.%<extension>s'))
       instance.execute!
       expect(File.exist?(File.join(tmp_dir, '2017', '08', '06', 'test1.jpg'))).to eq true
     end
@@ -107,7 +107,7 @@ describe Imagesorter::FileBatchProcessor do
       instance = described_class.new(source:      test_dir,
                                      categorizer: mtime_categorizer,
                                      processor:   Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
-                                                                                      copy_mode: :move))
+                                                                                       copy_mode: :move))
       dest = File.join(tmp_dir, '2017', '08', '06')
       FileUtils.mkdir_p(dest)
       FileUtils.cp(File.join(fixture_dir, 'test2.jpg'), File.join(dest, 'test1.jpg'))

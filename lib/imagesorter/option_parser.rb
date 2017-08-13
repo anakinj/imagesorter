@@ -13,7 +13,7 @@ module Imagesorter
       destination_format: '%Y/%m/%d/%{full_name}' # rubocop:disable Style/FormatStringToken
     }.freeze
 
-    def self.parse(argv)
+    def self.parse(argv) # rubocop:disable  Metrics/MethodLength, Metrics/AbcSize
       options = OpenStruct.new(DEFAULT_OPTIONS)
 
       # rubocop:disable Metrics/BlockLength

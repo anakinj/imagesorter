@@ -5,6 +5,7 @@ require 'fileutils'
 require 'ostruct'
 require 'r18n-core'
 require 'exifr/jpeg'
+require 'json'
 
 R18n.set('en')
 

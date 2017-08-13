@@ -80,7 +80,7 @@ module Imagesorter
         queue_categorizing(file)
       end
     end
-    require 'json'
+
     def queue_categorizing(file)
       queue_job do
         file.process!(@categorizer)
