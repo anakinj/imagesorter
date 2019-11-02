@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
+require 'optparse'
+
 module Imagesorter
   module OptionParser
     DEFAULT_OPTIONS = {
-      silent:    false,
-      test:      false,
+      silent: false,
+      test: false,
       recursive: false,
       copy_mode: :copy,
-      threads:   1,
-      locale:    'en-us',
-      extensions: %w[JPG JPEG MP4 MOV],
+      threads: 1,
+      locale: 'en-us',
+      extensions: %w[JPG JPEG MP4 MOV PNG CR2],
       destination_format: '%Y/%m/%d/%{full_name}' # rubocop:disable Style/FormatStringToken
     }.freeze
 
@@ -81,6 +83,7 @@ module Imagesorter
           exit
         end
       end
+      # rubocop:enable Metrics/BlockLength
 
       parser.parse!(argv)
 
@@ -97,6 +100,7 @@ module Imagesorter
       mandatory = %i[source dest]
       missing = mandatory.select { |param| options[param].nil? }
       return if missing.empty?
+
       raise ::OptionParser::MissingArgument, missing.join(', ')
     end
   end

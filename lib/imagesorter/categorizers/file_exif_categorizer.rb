@@ -12,8 +12,9 @@ module Imagesorter
 
         time = exif.date_time
         return nil if time.nil?
+
         file.time = time
-      rescue
+      rescue StandardError
         nil
       end
     end

@@ -14,7 +14,7 @@ module Imagesorter
   # Gem related helpers
   module Gem
     def self.root
-      @root ||= File.expand_path('../../..', __FILE__)
+      @root ||= File.expand_path('../..', __dir__)
     end
 
     def self.version

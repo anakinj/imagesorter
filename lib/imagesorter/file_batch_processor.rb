@@ -54,6 +54,7 @@ module Imagesorter
 
     def collect_file_from_dir(dir, file)
       return if file =~ /^\.\.?$/
+
       full_path = File.join(dir, file)
 
       if File.directory?(full_path)
@@ -84,8 +85,7 @@ module Imagesorter
     def queue_categorizing(file)
       queue_job do
         file.process!(@categorizer)
-
-        Imagesorter.logger.debug "#{file.file.path} metadata: #{JSON.pretty_generate(file.to_h)}"
+        # Imagesorter.logger.debug "#{file.file.path} metadata: #{JSON.pretty_generate(file.to_h)}"
 
         increment(@categorizer.step_name)
         queue_proceesing(file)
@@ -94,6 +94,7 @@ module Imagesorter
 
     def queue_proceesing(file)
       return if @processor.nil?
+
       queue_job do
         file.process!(@processor)
         increment(@processor.step_name)
@@ -102,6 +103,7 @@ module Imagesorter
 
     def increment(step)
       return if @progress_proc.nil?
+
       @progress_proc.call(step: step.ljust(14, ' '),
                           total_steps: @total_steps)
     end

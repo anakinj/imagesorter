@@ -27,8 +27,9 @@ module Imagesorter
     rescue Interrupt
       puts 'FAIL: INTERRUPTED'
       exit 1
-    rescue => e
+    rescue StandardError => e
       puts e
+      puts e.backtrace
       exit 2
     end
 
@@ -64,18 +65,16 @@ module Imagesorter
 
     def batch_options
       options = {
-        source:     @options.source,
-        recursive:  @options.recursive,
+        source: @options.source,
+        recursive: @options.recursive,
         extensions: @options.extensions,
-        processor:  Imagesorter::FileSystemProcessor.new(destination:     @options.dest,
-                                                         destination_fmt: @options.destination_format,
-                                                         copy_mode:       @options.copy_mode,
-                                                         test:            @options.test)
+        processor: Imagesorter::FileSystemProcessor.new(destination: @options.dest,
+                                                        destination_fmt: @options.destination_format,
+                                                        copy_mode: @options.copy_mode,
+                                                        test: @options.test)
       }
 
-      if progressbar_enabled?
-        options[:progress_proc] = proc { |progress_options| progress(progress_options) }
-      end
+      options[:progress_proc] = proc { |progress_options| progress(progress_options) } if progressbar_enabled?
 
       options
     end
@@ -87,7 +86,7 @@ module Imagesorter
     end
 
     def finalize
-      @progressbar.finish if @progressbar
+      @progressbar&.finish
     end
 
     def progressbar_enabled?

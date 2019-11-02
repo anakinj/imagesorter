@@ -10,6 +10,7 @@ module Imagesorter
       def process(file)
         time = file.file.send(@stat)
         return nil if time.nil?
+
         file.time = time
       end
     end

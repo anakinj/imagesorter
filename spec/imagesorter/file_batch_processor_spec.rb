@@ -20,7 +20,7 @@ describe Imagesorter::FileBatchProcessor do
   after do
     begin
       FileUtils.rm_rf(tmp_dir)
-    rescue
+    rescue StandardError
       nil
     end
   end
@@ -74,9 +74,9 @@ describe Imagesorter::FileBatchProcessor do
     end
 
     it 'iterates all collected files and uses the processor to process the file' do
-      instance = described_class.new(source:      test_dir,
+      instance = described_class.new(source: test_dir,
                                      categorizer: mtime_categorizer,
-                                     processor:   Imagesorter::FileSystemProcessor.new(destination: tmp_dir))
+                                     processor: Imagesorter::FileSystemProcessor.new(destination: tmp_dir))
 
       instance.execute!
 
@@ -84,10 +84,10 @@ describe Imagesorter::FileBatchProcessor do
     end
 
     it 'can move files instead of copying' do
-      instance = described_class.new(source:      test_dir,
+      instance = described_class.new(source: test_dir,
                                      categorizer: mtime_categorizer,
-                                     processor:   Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
-                                                                                       copy_mode: :move))
+                                     processor: Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
+                                                                                     copy_mode: :move))
 
       instance.execute!
       expect(File.exist?(File.join(test_dir, 'test1.jpg'))).to eq false
@@ -95,19 +95,19 @@ describe Imagesorter::FileBatchProcessor do
     end
 
     it 'uses a empty value for the missing keys' do
-      instance = described_class.new(source:      test_dir,
+      instance = described_class.new(source: test_dir,
                                      categorizer: mtime_categorizer,
-                                     processor:   Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
-                                                                                       destination_fmt: '%Y/%m/%d/%<noop>s/%<name>s.%<extension>s'))
+                                     processor: Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
+                                                                                     destination_fmt: '%Y/%m/%d/%<noop>s/%<name>s.%<extension>s'))
       instance.execute!
       expect(File.exist?(File.join(tmp_dir, '2017', '08', '06', 'test1.jpg'))).to eq true
     end
 
     it 'does not overwrite existing files' do
-      instance = described_class.new(source:      test_dir,
+      instance = described_class.new(source: test_dir,
                                      categorizer: mtime_categorizer,
-                                     processor:   Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
-                                                                                       copy_mode: :move))
+                                     processor: Imagesorter::FileSystemProcessor.new(destination: tmp_dir,
+                                                                                     copy_mode: :move))
       dest = File.join(tmp_dir, '2017', '08', '06')
       FileUtils.mkdir_p(dest)
       FileUtils.cp(File.join(fixture_dir, 'test2.jpg'), File.join(dest, 'test1.jpg'))

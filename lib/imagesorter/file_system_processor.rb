@@ -24,7 +24,7 @@ module Imagesorter
       source = file.file.path
 
       dest = handle_duplicate(source, format_destination(file, full_name: File.basename(source),
-                                                               name:      File.basename(source, '.*'),
+                                                               name: File.basename(source, '.*'),
                                                                extension: File.extname(source).delete('.')))
 
       return if dest.nil?
